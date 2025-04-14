@@ -1,8 +1,9 @@
 package com.example.todo.domain.model.todo;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,32 +15,29 @@ public class ToDoTest {
      * テスト用の「やること」タスクID
      */
     private static final Long TEST_ID = 1L;
-    
+
     /**
      * テスト用の「やること」タスクタイトル
      */
     private static final String TEST_TITLE = "コーヒーを買う";
-    
+
     /**
      * テスト用の「やること」タスク完了状態
      */
     private static final boolean TEST_DONE = false;
 
-    /**
-     * テスト用の「やること」タスクインスタンス
-     */
-    private ToDo testToDo;
-
-    @BeforeEach
-    void setUp() {
-        testToDo = new ToDo(TEST_ID, TEST_TITLE, TEST_DONE);
-    }
-
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {
+            "1,コーヒーを買う,false",
+            "\\u0000,テストを書く,false"
+    }, nullValues = "\\u0000")
     @DisplayName("コンストラクタでToDoが正しく生成されること")
-    void testToDoCreation() {
+    void testToDoCreation(Long id, String title, boolean done) {
+        // 実行
+        ToDo toDo = new ToDo(id, title, done);
+
         // 検証
-        verifyTaskProperties(testToDo, TEST_ID, TEST_TITLE, TEST_DONE);
+        verifyTaskProperties(toDo, id, title, done);
     }
 
     @Test
@@ -49,14 +47,15 @@ public class ToDoTest {
         Long newId = 2L;
         String newTitle = "コーヒーを飲む";
         boolean newDone = true;
+        ToDo toDo = new ToDo(TEST_ID, TEST_TITLE, TEST_DONE);
 
         // 実行
-        testToDo.setId(newId);
-        testToDo.setTitle(newTitle);
-        testToDo.setDone(newDone);
+        toDo.setId(newId);
+        toDo.setTitle(newTitle);
+        toDo.setDone(newDone);
 
         // 検証
-        verifyTaskProperties(testToDo, newId, newTitle, newDone);
+        verifyTaskProperties(toDo, newId, newTitle, newDone);
     }
 
     /**

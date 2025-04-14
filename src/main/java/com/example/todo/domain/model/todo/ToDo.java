@@ -1,7 +1,6 @@
 package com.example.todo.domain.model.todo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /**
  * ユーザーが管理する「やること」タスクを表すドメインエンティティ。
@@ -14,10 +13,16 @@ import jakarta.persistence.Id;
  * </ul>
  */
 @Entity
+@Table(name = "todos")
 public class ToDo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private boolean done;
 
     /**
