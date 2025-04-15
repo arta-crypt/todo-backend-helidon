@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("ToDoエンティティの単体テスト")
 public class ToDoTest {
@@ -41,6 +42,33 @@ public class ToDoTest {
 
         // 検証
         verifyTaskProperties(toDo, newId, newTitle, newDone);
+    }
+
+    @Test
+    @DisplayName("コピーコンストラクタで「やること」タスクが正しくコピーされること")
+    void testToDoCopyConstructor() {
+        // 準備
+        Long originalId = 2L;
+        String originalTitle = "牛乳を買う";
+        boolean originalDone = true;
+        ToDo originalToDo = new ToDo(originalId, originalTitle, originalDone);
+
+        // 実行
+        ToDo copiedToDo = new ToDo(originalToDo);
+
+        // 検証
+        verifyTaskProperties(copiedToDo, originalId, originalTitle, originalDone);
+    }
+
+    @Test
+    @DisplayName("コピーコンストラクタにnullを渡すとNullPointerExceptionが発生すること")
+    void testToDoCopyConstructorWithNull() {
+        NullPointerException exception = assertThrows(
+                NullPointerException.class,
+                () -> new ToDo(null),
+                "nullを渡す場合はNullPointerExceptionが発生するはずです");
+
+        assertEquals("コピー元のオブジェクトがnullです", exception.getMessage());
     }
 
     /**

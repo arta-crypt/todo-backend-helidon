@@ -1,6 +1,11 @@
 package com.example.todo.domain.model.todo;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 /**
  * ユーザーが管理する「やること」タスクを表すドメインエンティティ。
@@ -42,6 +47,21 @@ public class ToDo {
         setId(id);
         setTitle(title);
         setDone(done);
+    }
+
+    /**
+     * コピーコンストラクタ
+     *
+     * @param source コピー元の「やること」タスクアイテム
+     * @throws NullPointerException sourceがnullの場合
+     */
+    public ToDo(ToDo source) {
+        if (source == null) {
+            throw new NullPointerException("コピー元のオブジェクトがnullです");
+        }
+        setId(source.getId());
+        setTitle(source.getTitle());
+        setDone(source.isDone());
     }
 
     /**
