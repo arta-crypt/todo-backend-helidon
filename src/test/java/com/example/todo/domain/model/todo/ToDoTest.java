@@ -11,21 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("ToDoエンティティの単体テスト")
 public class ToDoTest {
 
-    /**
-     * テスト用の「やること」タスクID
-     */
-    private static final Long TEST_ID = 1L;
-
-    /**
-     * テスト用の「やること」タスクタイトル
-     */
-    private static final String TEST_TITLE = "コーヒーを買う";
-
-    /**
-     * テスト用の「やること」タスク完了状態
-     */
-    private static final boolean TEST_DONE = false;
-
     @ParameterizedTest
     @CsvSource(value = {
             "1,コーヒーを買う,false",
@@ -44,10 +29,10 @@ public class ToDoTest {
     @DisplayName("GetterおよびSetterでプロパティが正しく設定・取得できること")
     void testToDoGetterAndSetter() {
         // 準備
-        Long newId = 2L;
-        String newTitle = "コーヒーを飲む";
-        boolean newDone = true;
-        ToDo toDo = new ToDo(TEST_ID, TEST_TITLE, TEST_DONE);
+        Long newId = 1L;
+        String newTitle = "コーヒーを買う";
+        boolean newDone = false;
+        ToDo toDo = new ToDo();
 
         // 実行
         toDo.setId(newId);
