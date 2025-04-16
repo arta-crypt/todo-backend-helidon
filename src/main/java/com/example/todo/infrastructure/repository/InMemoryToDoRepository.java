@@ -10,43 +10,110 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryToDoRepository implements ToDoRepository {
+    /**
+     * 「やること」タスクオブジェクトを格納するインメモリストレージ。
+     * キーは「やること」タスクのID、値は「やること」タスクオブジェクト。
+     */
     private final Map<Long, ToDo> store = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong(1L);
 
+    /**
+     * 「やること」タスクオブジェクトのID生成に使用する原子的カウンター。
+     * スレッドセーフな方法で一意のIDを生成するために使用します。
+     */
+    private final AtomicLong idGenerator = new AtomicLong(0L);
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<ToDo> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<ToDo> findAll() {
         return List.copyOf(store.values());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public ToDo save(ToDo sourceTodo) {
-        if (sourceTodo.getId() == null) {
-            // incrementAndGetを使用して、インクリメント後の値をIDとして設定
-            sourceTodo.setId(idGenerator.incrementAndGet());
+    public ToDo create(ToDo sourceTodo) {
+        ToDo todoToCreate = new ToDo(sourceTodo);   // ディープコピー
+
+        if (todoToCreate.getId() == null) {
+            // IDが指定されていない場合は新しいIDを生成
+            todoToCreate.setId(generateNewId());
         } else {
-            // 既存のIDが存在するか確認
-            // もし存在しなければ、IDジェネレーターを更新して将来の重複を防ぐ
-            if (!store.containsKey(sourceTodo.getId())) {
-                // 既存IDがidGeneratorの現在値以上なら、idGeneratorを更新
-                idGenerator.updateAndGet(currentId ->
-                        Math.max(currentId, sourceTodo.getId() + 1));
+            // IDが指定されている場合、既存IDと衝突していないか確認
+            Long id = todoToCreate.getId();
+            if (store.containsKey(id)) {
+                throw new IllegalArgumentException("ToDo with ID " + id + " already exists.");
             }
-            // IDを設定
-            sourceTodo.setId(idGenerator.get());
+
+            // 将来のID生成で衝突しないようにIDジェネレーターを更新
+            updateIdGenerator(id);
         }
-        // ディープコピーを作成して変更不可にする
-        ToDo savedTodo = new ToDo(sourceTodo);
-        store.put(savedTodo.getId(), savedTodo);
-        return savedTodo;
+
+        // 保存
+        store.put(todoToCreate.getId(), todoToCreate);
+        return todoToCreate;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ToDo update(ToDo sourceTodo) {
+        if (sourceTodo.getId() == null) {
+            throw new IllegalArgumentException("Cannot update ToDo without ID");
+        }
+
+        Long id = sourceTodo.getId();
+        if (!store.containsKey(id)) {
+            throw new IllegalArgumentException("ToDo with ID " + id + " not found");
+        }
+
+        ToDo todoToUpdate = new ToDo(sourceTodo);   // ディープコピー
+        store.put(id, todoToUpdate);
+        return todoToUpdate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void delete(Long id) {
         store.remove(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsById(Long id) {
+        return id != null && store.containsKey(id);
+    }
+
+    /**
+     * 新しい一意のIdを生成します
+     *
+     * @return 生成された一意のID
+     */
+    private Long generateNewId() {
+        return idGenerator.incrementAndGet();
+    }
+
+    /**
+     * IDジェネレーターの値を更新して、将来のID生成で衝突しないようにします
+     *
+     * @param id 考慮すべきID
+     */
+    private void updateIdGenerator(Long id) {
+        idGenerator.updateAndGet(current -> Math.max(current, id + 1));
     }
 }

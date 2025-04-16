@@ -77,9 +77,11 @@ public class ToDo {
      * IDを設定します
      *
      * @param id 設定する「やること」タスクアイテムのID
+     * @return 設定された「やること」タスクアイテム
      */
-    public void setId(Long id) {
+    public ToDo setId(Long id) {
         this.id = id;
+        return this;
     }
 
     /**
@@ -95,9 +97,11 @@ public class ToDo {
      * タイトルを設定します
      *
      * @param title 設定する「やること」タスクアイテムのタイトル
+     * @return 設定された「やること」タスクアイテム
      */
-    public void setTitle(String title) {
+    public ToDo setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     /**
@@ -113,8 +117,10 @@ public class ToDo {
      * 完了状態を設定します
      *
      * @param done 設定する「やること」タスクアイテムの完了状態
+     * @return 設定された「やること」タスクアイテム
      */
-    public void setDone(boolean done) {
+    public ToDo setDone(boolean done) {
         this.done = done;
+        return this;
     }
 }
