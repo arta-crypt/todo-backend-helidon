@@ -36,9 +36,7 @@ public class ToDoTest {
         ToDo toDo = new ToDo();
 
         // 実行
-        toDo.setId(newId);
-        toDo.setTitle(newTitle);
-        toDo.setDone(newDone);
+        toDo.setId(newId).setTitle(newTitle).setDone(newDone);
 
         // 検証
         verifyTaskProperties(toDo, newId, newTitle, newDone);
