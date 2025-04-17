@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+
+import java.time.LocalDateTime;
 
 /**
  * ユーザーが管理する「やること」タスクを表すドメインエンティティ。
@@ -15,6 +18,9 @@ import jakarta.persistence.Table;
  *     <li>ID（Long）</li>
  *     <li>タイトル（String）</li>
  *     <li>完了状態（boolean）</li>
+ *     <li>バージョン（Long）</li>
+ *     <li>作成日時（LocalDateTime）</li>
+ *     <li>更新日時（LocalDateTime）</li>
  * </ul>
  */
 @Entity
@@ -30,10 +36,23 @@ public class ToDo {
     @Column(nullable = false)
     private boolean done;
 
+    @Version
+    @Column(nullable = false)
+    private Long version;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
     /**
      * デフォルトコンストラクタ
      */
     public ToDo() {
+        this.version = 0L;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     /**
