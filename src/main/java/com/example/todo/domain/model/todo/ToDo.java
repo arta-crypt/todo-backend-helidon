@@ -50,23 +50,44 @@ public class ToDo {
      * デフォルトコンストラクタ
      */
     public ToDo() {
-        this.version = 0L;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        setVersion(0L);
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
     }
 
     /**
-     * すべてのフィールドを指定するコンストラクタ
+     * 基本的なフィールドを指定するコンストラクタ
      *
      * @param id    「やること」タスクアイテムのID
      * @param title 「やること」タスクアイテムのタイトル
      * @param done  「やること」タスクアイテムの完了状態
      */
     public ToDo(Long id, String title, boolean done) {
+        this();
         setId(id);
         setTitle(title);
         setDone(done);
     }
+
+    /**
+     * すべてのフィールドを指定するコンストラクタ
+     *
+     * @param id        「やること」タスクアイテムのID
+     * @param title     「やること」タスクアイテムのタイトル
+     * @param done      「やること」タスクアイテムの完了状態
+     * @param version   「やること」タスクアイテムのバージョン
+     * @param createdAt 「やること」タスクアイテムの作成日時
+     * @param updatedAt 「やること」タスクアイテムの更新日時
+     */
+    public ToDo(Long id, String title, boolean done, Long version, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        setId(id);
+        setTitle(title);
+        setDone(done);
+        setVersion(version);
+        setCreatedAt(createdAt);
+        setUpdatedAt(updatedAt);
+    }
+
 
     /**
      * コピーコンストラクタ
@@ -81,6 +102,9 @@ public class ToDo {
         setId(source.getId());
         setTitle(source.getTitle());
         setDone(source.isDone());
+        setVersion(source.getVersion());
+        setCreatedAt(source.getCreatedAt());
+        setUpdatedAt(source.getUpdatedAt());
     }
 
     /**
@@ -120,6 +144,7 @@ public class ToDo {
      */
     public ToDo setTitle(String title) {
         this.title = title;
+        this.updatedAt = LocalDateTime.now();
         return this;
     }
 
@@ -140,6 +165,67 @@ public class ToDo {
      */
     public ToDo setDone(boolean done) {
         this.done = done;
+        this.updatedAt = LocalDateTime.now();
+        return this;
+    }
+
+    /**
+     * バージョンを取得します
+     *
+     * @return バージョン
+     */
+    public Long getVersion() {
+        return version;
+    }
+
+    /**
+     * バージョンを設定します
+     *
+     * @param version 設定する「やること」タスクアイテムのバージョン
+     * @return 設定された「やること」タスクアイテム
+     */
+    public ToDo setVersion(Long version) {
+        this.version = version;
+        return this;
+    }
+
+    /**
+     * 作成日時を取得します
+     *
+     * @return 「やること」タスクアイテムの作成日時
+     */
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * 作成日時を設定します
+     *
+     * @param createdAt 設定する「やること」タスクアイテムの作成日時
+     * @return 設定された「やること」タスクアイテム
+     */
+    public ToDo setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    /**
+     * 更新日時を取得します
+     *
+     * @return 「やること」タスクアイテムの更新日時
+     */
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * 更新日時を設定します
+     *
+     * @param updatedAt 設定する「やること」タスクアイテムの更新日時
+     * @return 設定された「やること」タスクアイテム
+     */
+    public ToDo setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
         return this;
     }
 }
