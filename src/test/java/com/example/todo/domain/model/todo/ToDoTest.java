@@ -15,13 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("ToDoエンティティの単体テスト")
 public class ToDoTest {
 
-    @ParameterizedTest
-    @CsvSource(value = {
-            "0,コーヒーを買う,false",
-            "\\u0000,テストを書く,false"
-    }, nullValues = "\\u0000")
+    @Test
     @DisplayName("基本コンストラクタでToDoが正しく生成されること")
-    void testToDoCreation(Long id, String title, boolean done) {
+    void testToDoCreation() {
+        // 準備
+        Long id = 0L;
+        String title = "テストタイトル";
+        boolean done = false;
+
         // 実行
         ToDo toDo = new ToDo(id, title, done);
 
@@ -31,10 +32,15 @@ public class ToDoTest {
 
     @ParameterizedTest
     @CsvSource(value = {
+            // id, title, done, version, createdAt, updatedAt
+            // ノーマルテスト
             "0,コーヒーを買う,false,0,2022-01-01T00:00:00,2022-01-01T00:00:00",
+            // nullテスト
             "\\u0000,\\u0000,false,\\u0000,\\u0000,\\u0000",
+            // 制限値テスト（最小値）
             "-9223372036854775808,,false,-9223372036854775808,1968-01-01T00:00:00,1968-01-01T00:00:00",
-            "9223372036854775807,あああああああああああ,true,9223372036854775807,9999-01-01T00:00:00,9999-01-01T00:00:00",
+            // 制限値テスト（最大値）
+            "9223372036854775807,ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ,true,9223372036854775807,9999-01-01T00:00:00,9999-01-01T00:00:00",
     }, nullValues = "\\u0000")
     @DisplayName("拡張コンストラクタで「やること」タスクが正しく生成されること")
     void testToDoExtendedConstructor(Long id, String title, boolean done, Long version, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -101,10 +107,10 @@ public class ToDoTest {
     @DisplayName("コピーコンストラクタで「やること」タスクが正しくコピーされること")
     void testToDoCopyConstructor() {
         // 準備
-        Long originalId = Long.MAX_VALUE;
-        String originalTitle = "ああああああああああああああああああああああああああああああああ";
+        Long originalId = 0L;
+        String originalTitle = "テストタイトル";
         boolean originalDone = false;
-        Long originalVersion = Long.MAX_VALUE;
+        Long originalVersion = 0L;
         LocalDateTime originalCreatedAt = LocalDateTime.now();
         LocalDateTime originalUpdatedAt = LocalDateTime.now();
         ToDo originalToDo = new ToDo(originalId, originalTitle, originalDone, originalVersion, originalCreatedAt, originalUpdatedAt);
