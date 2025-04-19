@@ -26,23 +26,47 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "todos")
 public class ToDo {
+    /**
+     * タスクの一意な識別子。
+     * データベース上で自動採番されます。
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * タスクのタイトル。
+     * null不可。
+     */
     @Column(nullable = false)
     private String title;
 
+    /**
+     * タスクの完了状態。
+     * trueの場合は完了、falseの場合は未完了を表します。
+     */
     @Column(nullable = false)
     private boolean done;
 
+    /**
+     * バージョン番号。
+     * 楽観ロックや更新管理のために利用します。
+     */
     @Version
     @Column(nullable = false)
     private Long version;
 
+    /**
+     * タスクの作成日時。
+     * レコード生成時に自動設定されます。
+     */
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * タスクの最終更新日時。
+     * レコード更新時に自動更新されます。
+     */
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
