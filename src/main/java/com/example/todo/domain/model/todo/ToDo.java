@@ -50,9 +50,10 @@ public class ToDo {
      * デフォルトコンストラクタ
      */
     public ToDo() {
+        LocalDateTime now = LocalDateTime.now();
         setVersion(0L);
-        setCreatedAt(LocalDateTime.now());
-        setUpdatedAt(LocalDateTime.now());
+        setCreatedAt(now);
+        setUpdatedAt(now);
     }
 
     /**

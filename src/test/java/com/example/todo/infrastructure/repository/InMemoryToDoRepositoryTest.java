@@ -146,4 +146,36 @@ class InMemoryToDoRepositoryTest {
                 () -> assertFalse(result3)
         );
     }
+
+    @DisplayName("監査項目（version, createdAt, updatedAt）が自動設定されること")
+    @Test
+    void testAuditFieldsOnCreateAndUpdate() {
+        ToDoRepository repo = new InMemoryToDoRepository();
+        ToDo entity = new ToDoBuilder().withId(null).withTitle("監査テスト").withDone(false).withVersion(null).withCreatedAt(null).withUpdatedAt(null).build();
+        ToDo created = repo.create(entity);
+        assertAll(
+                () -> assertEquals(0L, created.getVersion()),
+                () -> assertNotNull(created.getCreatedAt()),
+                () -> assertNotNull(created.getUpdatedAt()),
+                () -> assertEquals(created.getCreatedAt(), created.getUpdatedAt())
+        );
+        // 更新
+        ToDo updated = repo.update(new ToDo(created).setDone(true));
+        assertAll(
+                () -> assertEquals(1L, updated.getVersion()),
+                () -> assertEquals(created.getCreatedAt(), updated.getCreatedAt()),
+                () -> assertTrue(updated.getUpdatedAt().isAfter(updated.getCreatedAt()))
+        );
+    }
+
+    @DisplayName("version不一致時に例外が発生すること")
+    @Test
+    void testVersionMismatchThrowsException() {
+        ToDoRepository repo = new InMemoryToDoRepository();
+        ToDo created = repo.create(new ToDoBuilder().withTitle("versionテスト").build());
+        // versionを変更して不正な更新
+        ToDo invalid = new ToDo(created).setVersion(created.getVersion() + 10);
+        Exception ex = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, () -> repo.update(invalid));
+        assertTrue(ex.getMessage().contains("Version mismatch"));
+    }
 }
