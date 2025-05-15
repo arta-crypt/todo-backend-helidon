@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * InMemoryToDoRepositoryu306eu30c6u30b9u30c8
+ * InMemoryToDoRepositoryのテスト
  */
 class InMemoryToDoRepositoryTest {
 
