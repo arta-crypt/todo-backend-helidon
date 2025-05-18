@@ -257,7 +257,7 @@ public class ToDo {
 
     /**
      * このメソッドは、他のオブジェクトとこのオブジェクトが等しいかどうかを比較します。<br>
-     * 等しいとみなす条件は、タスクのID、タイトル、完了フラグ、バージョン、作成日時、更新日時がすべて一致することです。
+     * 等しいとみなす条件は、タスクのIDが一致することです。
      *
      * @param o 比較対象のオブジェクト
      * @return 等しい場合はtrue、そうでない場合はfalse
@@ -268,11 +268,7 @@ public class ToDo {
         if (!(o instanceof ToDo toDo)) return false;
 
         return isDone() == toDo.isDone()
-                && Objects.equals(getId(), toDo.getId())
-                && Objects.equals(getTitle(), toDo.getTitle())
-                && Objects.equals(getVersion(), toDo.getVersion())
-                && Objects.equals(getCreatedAt(), toDo.getCreatedAt())
-                && Objects.equals(getUpdatedAt(), toDo.getUpdatedAt());
+                && Objects.equals(getId(), toDo.getId());
     }
 
     /**
@@ -280,11 +276,6 @@ public class ToDo {
      * ハッシュコードは、以下の項目に基づいて計算されます：
      * <ul>
      *     <li>タスクのID（null許容）</li>
-     *     <li>タイトル（null許容）</li>
-     *     <li>完了フラグ（null非許容）</li>
-     *     <li>バージョン（null許容）</li>
-     *     <li>作成日時（null非許容）</li>
-     *     <li>更新日時（null非許容）</li>
      * </ul>
      * 各フィールドがnullの場合も考慮され、null安全なハッシュコードを生成します。<br>
      *
@@ -292,6 +283,6 @@ public class ToDo {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getTitle(), isDone(), getVersion(), getCreatedAt(), getUpdatedAt());
+        return Objects.hash(getId());
     }
 }
