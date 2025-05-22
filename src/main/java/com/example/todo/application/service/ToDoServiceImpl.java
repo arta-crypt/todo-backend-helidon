@@ -8,31 +8,36 @@ import java.util.List;
 import java.util.Optional;
 
 public class ToDoServiceImpl implements ToDoService {
+
+    private final ToDoRepository repository;
+
     @Inject
-    ToDoRepository repository;
+    public ToDoServiceImpl(ToDoRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public ToDo create(ToDo todo) {
-        throw new UnsupportedOperationException();
+        return repository.create(todo);
     }
 
     @Override
     public Optional<ToDo> findById(Long id) {
-        throw new UnsupportedOperationException();
+        return repository.findById(id);
     }
 
     @Override
     public List<ToDo> findAll() {
-        throw new UnsupportedOperationException();
+        return repository.findAll();
     }
 
     @Override
     public ToDo update(ToDo todo) {
-        throw new UnsupportedOperationException();
+        return repository.update(todo);
     }
 
     @Override
     public void delete(Long id) {
-        throw new UnsupportedOperationException();
+        repository.delete(id);
     }
 }
