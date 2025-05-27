@@ -19,6 +19,9 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String... args) {
+        if (System.getProperty("java.util.logging.manager") == null) {
+            System.setProperty("java.util.logging.manager", "org.apache.logging.log4j.jul.LogManager");
+        }
         logger.info("ToDoアプリケーションを開始します...");
 
         try {
@@ -76,7 +79,7 @@ public class Main {
         Server server = Server.create().start();
 
         long duration = System.currentTimeMillis() - startTime;
-        logger.info("サーバーがきどうしました　（起動時間：{}ms）", duration);
+        logger.info("サーバーが起動しました　（起動時間：{}ms）", duration);
 
         return server;
     }
