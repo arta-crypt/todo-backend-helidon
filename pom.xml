@@ -14,7 +14,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.serface.pulugin.version>3.5.3</maven.serface.pulugin.version>
         <junit.version>5.13.0-M2</junit.version>
         <mockito.version>5.17.0</mockito.version>
         <cucumber.version>7.22.0</cucumber.version>
