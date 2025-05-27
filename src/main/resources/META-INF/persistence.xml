@@ -3,20 +3,10 @@
              xmlns="https://jakarta.ee/xml/ns/persistence"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
-
-    <persistence-unit name="pu1" transaction-type="JTA">
-        <jta-data-source>ds1</jta-data-source>
-        <class>com.example.todo.Pokemon</class>
-        <class>com.example.todo.PokemonType</class>
-        <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-            <property name="hibernate.column_ordering_strategy" value="legacy"/>
-            <property name="jakarta.persistence.sql-load-script-source" value="META-INF/init_script.sql"/>
-        </properties>
-    </persistence-unit>
+    
     <persistence-unit name="todoPU" transaction-type="JTA">
         <jta-data-source>todoDS</jta-data-source>
-        <class>com.example.todo.domain.model.todo.ToDo</class>
+        <class>com.example.todo.todo.domain.model.ToDo</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.column_ordering_strategy" value="legacy"/>
