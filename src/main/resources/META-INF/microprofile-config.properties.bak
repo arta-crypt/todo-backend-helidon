@@ -10,7 +10,7 @@ app.greeting=Hello
 
 
 # Datasource properties
-javax.sql.DataSource.ds1.dataSourceClassName=oracle.jdbc.pool.OracleDataSource
-javax.sql.DataSource.ds1.dataSource.url=jdbc:oracle:thin:@localhost:1521:service_name
-javax.sql.DataSource.ds1.dataSource.user=your_user_name
-javax.sql.DataSource.ds1.dataSource.password=your_password
+javax.sql.DataSource.todoDS.dataSourceClassName=oracle.jdbc.pool.OracleDataSource
+javax.sql.DataSource.todoDS.dataSource.url=jdbc:oracle:thin:@localhost:1521:service_name
+javax.sql.DataSource.todoDS.dataSource.user=your_user_name
+javax.sql.DataSource.todoDS.dataSource.password=your_password
