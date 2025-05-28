@@ -32,6 +32,8 @@ public class Main {
             registerShutdownHook(server);
 
             logger.info("アプリケーションが正常に起動しました");
+
+            printApplicationInfo(server);
         } catch (Exception e) {
             logger.error("アプリケーションの起動に失敗しました", e);
             System.exit(1);
