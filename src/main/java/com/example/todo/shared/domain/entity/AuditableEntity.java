@@ -18,7 +18,7 @@ public abstract class AuditableEntity {
      * 楽観ロックや更新管理のために利用
      */
     @Version
-    @Column(name = "version", nullable = false)
+    @Column(name = "version", nullable = false, insertable = false, updatable = false)
     private Long version;
 
     /**
@@ -26,7 +26,7 @@ public abstract class AuditableEntity {
      * <p>
      * レコード生成時に自動設定されます。
      */
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     /**
@@ -34,7 +34,7 @@ public abstract class AuditableEntity {
      * <p>
      * レコード更新時に自動更新されます。
      */
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
     private LocalDateTime updatedAt;
 
     // ====== Setter/Getter ======

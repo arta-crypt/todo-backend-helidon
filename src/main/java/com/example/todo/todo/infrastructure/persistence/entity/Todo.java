@@ -10,6 +10,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * ユーザーが管理するTodoTaskを表すドメインエンティティ
@@ -168,5 +169,65 @@ public class Todo extends AuditableEntity {
     public Todo setDone(boolean done) {
         this.done = done;
         return this;
+    }
+
+    // ====== Equals/HashCode ======
+
+    /**
+     * このエンティティが指定されたオブジェクトと等しいかどうかを比較します。
+     * <ul>
+     *  <li>オブジェクトが同一インスタンスであれば true。</li>
+     *  <li>オブジェクトが null または異なるクラスであれば false。</li>
+     *  <li>両方のエンティティの id が null であれば false (永続化されていない異なるインスタンスは等しくないとみなす)。</li>
+     *  <li>両方のエンティティの id が null でなく、かつ等しければ true。</li>
+     *  <li>上記以外の場合は false。</li>
+     * </ul>
+     *
+     * @param o 比較対象のオブジェクト
+     * @return このエンティティが指定されたオブジェクトと等しい場合は true、そうでない場合は false
+     */
+    @Override
+    public boolean equals(Object o) {
+        // 同一インスタンスのチェック
+        if (this == o) return true;
+        // nullチェックとクラスタイプのチェック
+        if (!(o instanceof Todo that)) return false;
+        // id が null の場合 (永続化されていないエンティティ)
+        // 両方のidがnullでも、異なるインスタンスであれば等しくありません。
+        if (this.id == null || that.id == null) return false;
+        // IDで比較
+        return Objects.equals(id, that.id);
+    }
+
+    /**
+     * このエンティティのハッシュコードを返します。
+     * {@link #equals(Object)} メソッドと一貫性を持たせるため、
+     * id が null でない場合は id のハッシュコードを、
+     * id が null の場合は定数 (ここでは Objects.hash(null) で 0) を返します。
+     *
+     * @return このエンティティのハッシュコード
+     */
+    @Override
+    public int hashCode() {
+        // id が null の場合、Objects.hash(null) は 0 を返します。
+        // これにより、永続化されていない複数のインスタンスが同じハッシュコードを持つ可能性がありますが、
+        // equals メソッドがそれらを区別するため、HashSetなどのコレクションで正しく動作します。
+        return Objects.hash(id);
+    }
+
+    // ====== toString ======
+
+    /**
+     * TodoTaskの内容を文字列形式で返します。
+     *
+     * @return TodoTaskの内容を含む文字列
+     */
+    @Override
+    public String toString() {
+        return String.format(
+                "Todo{id=%d, title=%s, done=%B, version=%d, created_at=%s, updated_at=%s}",
+                getId(), getTitle(), isDone(), getVersion(),
+                getCreatedAt().toString(), getUpdatedAt().toString()
+        );
     }
 }
