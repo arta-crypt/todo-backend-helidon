@@ -39,10 +39,10 @@ public interface TodoRepository {
     /**
      * 完了状態でTodoEntityを検索する
      *
-     * @param completed 完了フラグ（{@code true}：完了済、{@code false}：未完了）
+     * @param isDone 完了フラグ（{@code true}：完了済、{@code false}：未完了）
      * @return
      */
-    List<Todo> findByCompleted(boolean completed);
+    List<Todo> findByCompleted(boolean isDone);
 
     /**
      * タイトルでTodoEntityを部分検索する（大文字・小文字区別なし）
@@ -70,6 +70,14 @@ public interface TodoRepository {
     boolean deleteById(Long id);
 
     /**
+     * TodoEntityを削除する
+     *
+     * @param todoEntity 削除するTodoEntity
+     * @return 削除が成功した場合 {@code true}
+     */
+    boolean delete(Todo todoEntity);
+
+    /**
      * すべてのTodoEntityを削除する（テスト用）
      *
      * @return 削除されたTodoEntityの件数
@@ -89,6 +97,13 @@ public interface TodoRepository {
      * @return 完了済みTodoEntityの件数
      */
     long countByCompleted();
+
+    /**
+     * 未完了のTodoEntityの数を取得する
+     *
+     * @return 未完了TodoEntityの件数
+     */
+    long countByPending();
 
     /**
      * 指定したIDのTodoEntityが存在するかチェック
