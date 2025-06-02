@@ -20,6 +20,7 @@
         <cucumber.version>7.22.0</cucumber.version>
         <jacoco.version>0.8.13</jacoco.version>
         <log4j.version>3.0.0-beta2</log4j.version>
+        <assertj.version>4.0.0-M1</assertj.version>
     </properties>
 
     <dependencies>
@@ -206,6 +207,13 @@
             <artifactId>log4j-jul</artifactId>
             <version>${log4j.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

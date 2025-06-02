@@ -4,8 +4,6 @@ import com.example.todo.todo.domain.repository.TodoRepository;
 import com.example.todo.todo.infrastructure.persistence.entity.Todo;
 import io.helidon.microprofile.testing.junit5.HelidonTest;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,9 +23,6 @@ public class TodoRepositoryImplTest {
     @Inject
     private TodoRepository todoRepository;  // テスト対象のリポジトリインターフェース
 
-    @PersistenceContext(unitName = "todoPU")
-    private EntityManager entityManager;
-
     @Test
     @Transactional  // 各テストメソッドをトランザクション内で実行し、テスト後にロールバック
     @DisplayName("新しいTodoを保存するとID、バージョン、タイムスタンプがDBで自動設定される")
@@ -41,9 +36,7 @@ public class TodoRepositoryImplTest {
                 () -> assertThat(savedTodo).isNotNull(),
                 () -> assertThat(savedTodo.getId()).isNotNull()
         );
-        // DBによって自動設定される値を確認するため、一度flushして永続化コンテキストをクリアし、再取得する
-        entityManager.flush();  // 変更をDBに同期
-        entityManager.clear();  // 永続化コンテキストをクリアし、キャッシュされていない状態にする
+        // DBによって自動設定される値を確認するため、再取得する
         Optional<Todo> fetchedTodo = todoRepository.findById(savedTodo.getId());
 
         // Assert
