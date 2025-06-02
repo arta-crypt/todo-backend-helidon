@@ -21,8 +21,8 @@ import java.util.Optional;
  */
 @ApplicationScoped
 @Transactional
-public class ToDoRepositoryImpl implements TodoRepository {
-    private static final Logger logger = LogManager.getLogger(ToDoRepositoryImpl.class);
+public class TodoRepositoryImpl implements TodoRepository {
+    private static final Logger logger = LogManager.getLogger(TodoRepositoryImpl.class);
 
     @PersistenceContext(unitName = "todoPU")
     private EntityManager entityManager;
