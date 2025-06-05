@@ -3,12 +3,12 @@
              xmlns="https://jakarta.ee/xml/ns/persistence"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
-    
+
     <persistence-unit name="todoPU" transaction-type="JTA">
         <jta-data-source>todoDS</jta-data-source>
-        <class>com.example.todo.todo.domain.model.ToDo</class>
+        <class>com.example.todo.todo.infrastructure.persistence.entity.Todo</class>
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
             <property name="hibernate.column_ordering_strategy" value="legacy"/>
         </properties>
     </persistence-unit>

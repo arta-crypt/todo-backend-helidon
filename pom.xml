@@ -14,11 +14,13 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.serface.pulugin.version>3.5.3</maven.serface.pulugin.version>
+        <mainClass>com.example.todo.Main</mainClass>
         <junit.version>5.13.0-M2</junit.version>
         <mockito.version>5.17.0</mockito.version>
         <cucumber.version>7.22.0</cucumber.version>
         <jacoco.version>0.8.13</jacoco.version>
+        <log4j.version>3.0.0-beta2</log4j.version>
+        <assertj.version>4.0.0-M1</assertj.version>
     </properties>
 
     <dependencies>
@@ -185,6 +187,32 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jul -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jul</artifactId>
+            <version>${log4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
