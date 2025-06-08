@@ -166,9 +166,27 @@ public class Todo extends AuditableEntity {
      * @param done 設定するtodoTaskの完了状態
      * @return 設定されたtodoTask
      */
-    public Todo setDone(boolean done) {
+    private Todo setDone(boolean done) {
         this.done = done;
         return this;
+    }
+
+    /**
+     * 未完了状態に設定します
+     *
+     * @return 設定されたtodoTask
+     */
+    public Todo reopen() {
+        return setDone(false);
+    }
+
+    /**
+     * 完了状態に設定します
+     *
+     * @return 設定されたtodoTask
+     */
+    public Todo complete() {
+        return setDone(true);
     }
 
     // ====== Equals/HashCode ======

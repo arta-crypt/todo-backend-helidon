@@ -33,7 +33,7 @@ public class TodoRepositoryImplTest {
     @BeforeEach
     @Transactional
     void setUp() {
-//        entityManager.clear();
+        entityManager.clear();
     }
 
     @Test
@@ -89,5 +89,88 @@ public class TodoRepositoryImplTest {
                         () -> assertThat(targetTodo.getTitle()).isEqualTo(todo.getTitle())
                 )
         );
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("存在しないIDで検索するとOptional.emptyが返される")
+    void findById_nonExistingTodo_shouldReturnEmpty() {
+        // Arrange
+        Long nonExistingId = -999L;
+
+        // Act
+        Optional<Todo> fetchedOpt = todoRepository.findById(nonExistingId);
+
+        // Assert
+        assertThat(fetchedOpt).isEmpty();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("既存のTodoを更新するとフィールド変更され、バージョン外クリメントされ、UpdatedAtが更新される")
+    void update_existingTodo_shouldUpdateFieldsAndIncrementVersionAndUpdateTimestamp() {
+        // Arrange: 初期データ作成
+        var beforeUpdateTitle = "更新テスト";
+        var beforeUpdateVersion = 0L;
+        Todo beforeUpdateTodo = new Todo(beforeUpdateTitle);
+        entityManager.persist(beforeUpdateTodo);
+        entityManager.flush();
+        // 更新前TodoEntityが登録されている事を確認
+        assertAll(
+                () -> assertThat(beforeUpdateTodo.getId()).isNotNull(),
+                () -> assertThat(beforeUpdateTodo.getTitle()).isNotNull().isEqualTo(beforeUpdateTitle),
+                () -> assertThat(beforeUpdateTodo.isDone()).isFalse(),
+                () -> assertThat(beforeUpdateTodo.getVersion()).isNotNull().isEqualTo(beforeUpdateVersion),
+                () -> assertThat(beforeUpdateTodo.getCreatedAt()).isNotNull().isCloseTo(LocalDateTime.now(), within(5, ChronoUnit.SECONDS)),
+                () -> assertThat(beforeUpdateTodo.getUpdatedAt()).isNotNull().isCloseTo(beforeUpdateTodo.getCreatedAt(), within(1, ChronoUnit.SECONDS))
+        );
+
+        // Act
+        // updatedAtが確実に変わるように少し待機
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            System.out.println("スレッドが割り込まれました！");
+            Thread.currentThread().interrupt();
+        }
+        Todo fetchedTodo = entityManager.find(Todo.class, beforeUpdateTodo.getId());
+        fetchedTodo.complete();
+        Todo afterUpdateTodo = entityManager.merge(fetchedTodo);
+        entityManager.flush();
+
+        // Assert
+        assertThat(afterUpdateTodo).isNotNull().satisfies(
+                todo -> assertAll(
+                        () -> assertThat(todo.getId()).isEqualTo(beforeUpdateTodo.getId()),
+                        () -> assertThat(todo.getTitle()).isEqualTo(beforeUpdateTodo.getTitle()),
+                        () -> assertThat(todo.isDone()).isNotNull().isTrue(),
+                        () -> assertThat(todo.getVersion()).isEqualTo(beforeUpdateVersion + 1),
+                        () -> assertThat(todo.getCreatedAt()).isEqualTo(beforeUpdateTodo.getCreatedAt()),
+                        () -> assertThat(ChronoUnit.SECONDS.between(todo.getCreatedAt(), todo.getUpdatedAt())).isGreaterThan(5),
+                        () -> assertThat(todo.getUpdatedAt()).isCloseTo(LocalDateTime.now(), within(5, ChronoUnit.SECONDS))
+                )
+        );
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("既存のTodoをIdで削除するとDBから削除される")
+    void deleteById_existingTodo_shouldRemoveTodo() {
+        // Arrange
+        Todo targetTodo = new Todo("削除対象タスク");
+        entityManager.persist(targetTodo);
+        entityManager.flush();
+        Long todoId = targetTodo.getId();
+        // 削除前に存在することを確認
+        assertThat(todoRepository.findById(todoId)).isPresent();
+
+        // Act
+        var result = todoRepository.delete(targetTodo);
+        assertThat(result).isTrue();
+        entityManager.flush();
+
+        // Assert
+        // 削除されていることを確認
+        assertThat(todoRepository.findById(todoId)).isEmpty();
     }
 }
