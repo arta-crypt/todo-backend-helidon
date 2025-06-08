@@ -13,10 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @HelidonTest
@@ -45,9 +46,8 @@ public class TodoRepositoryImplTest {
 
         //Act
         Todo savedTodo = todoRepository.save(newTodo);
-        assertAll(
-                () -> assertThat(savedTodo).isNotNull(),
-                () -> assertThat(savedTodo.getId()).isNotNull()
+        assertThat(savedTodo).isNotNull().satisfies(
+                todo -> assertThat(todo.getId()).isNotNull()
         );
         // DBによって自動設定される値を確認するため、再取得する
         Optional<Todo> fetchedOpt = todoRepository.findById(savedTodo.getId());
@@ -143,7 +143,7 @@ public class TodoRepositoryImplTest {
                 todo -> assertAll(
                         () -> assertThat(todo.getId()).isEqualTo(beforeUpdateTodo.getId()),
                         () -> assertThat(todo.getTitle()).isEqualTo(beforeUpdateTodo.getTitle()),
-                        () -> assertThat(todo.isDone()).isNotNull().isTrue(),
+                        () -> assertThat(todo.isDone()).isTrue(),
                         () -> assertThat(todo.getVersion()).isEqualTo(beforeUpdateVersion + 1),
                         () -> assertThat(todo.getCreatedAt()).isEqualTo(beforeUpdateTodo.getCreatedAt()),
                         () -> assertThat(ChronoUnit.SECONDS.between(todo.getCreatedAt(), todo.getUpdatedAt())).isGreaterThan(5),
@@ -172,5 +172,43 @@ public class TodoRepositoryImplTest {
         // Assert
         // 削除されていることを確認
         assertThat(todoRepository.findById(todoId)).isEmpty();
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("複数のTodoが存在する場合、findAllですべて取得できる")
+    void findAll_shouldReturnAllTodos() {
+        // Arrange
+        String title1 = "タスク1";
+        String title2 = "タスク2";
+        Todo todo1 = new Todo(title1);
+        Todo todo2 = new Todo(title2);
+        entityManager.persist(todo1);
+        entityManager.persist(todo2);
+        entityManager.flush();
+
+        // Act
+        List<Todo> todos = todoRepository.findAll();
+
+        // Assert
+        assertThat(todos).filteredOn(todo -> todo.getId().equals(todo1.getId()) || todo.getId().equals(todo2.getId()))
+                .extracting(Todo::getTitle).containsExactlyInAnyOrder(title1, title2);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Todoが存在しない場合、findAllはからのリストを返す")
+    void findAll_whenNoTodosExist_shouldReturnEmptyList() {
+        // Arrange
+        entityManager.createQuery("DELETE FROM Todo").executeUpdate();
+
+        // Act
+        List<Todo> todos = todoRepository.findAll();
+
+        // Assert
+        assertThat(todos).isEmpty();
+
+        // Rollback
+        entityManager.getTransaction().rollback();
     }
 }

@@ -61,6 +61,17 @@ public class Todo extends AuditableEntity {
 
     /**
      * デフォルトコンストラクタ
+     * <p>
+     * 空文字のタイトルのTodoEntityが作成されます
+     *
+     * @see Todo#Todo(String)
+     */
+    public Todo() {
+        this("");
+    }
+
+    /**
+     * デフォルトコンストラクタ
      *
      * @param title TodoTaskのタイトル
      */
