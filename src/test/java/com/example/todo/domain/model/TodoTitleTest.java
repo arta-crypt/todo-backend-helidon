@@ -72,17 +72,99 @@ public class TodoTitleTest {
                     .hasMessageContaining("タイトルは必須です");
         }
 
-        // Todo: 空白のみの場合は例外が発生する
+        @Test
+        @DisplayName("空白のみの場合は例外が発生する")
+        void throwExceptionForWhitespaceOnly() {
+            // Given
+            String whitespaceOnly = "   ";
 
-        // Todo: 最大文字数を超える場合は例外が発生する
+            // When & Then
+            assertThatThrownBy(() -> new TodoTitle(whitespaceOnly))
+                    .as("空白のみの場合は例外が発生する")
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("タイトルは必須です");
+        }
+
+        @Test
+        @DisplayName("最大文字数を超える場合は例外が発生する")
+        void throwExceptionForTooLongTitle() {
+            // Given
+            String tooLongTitle = "a".repeat(256);
+
+            // When & Then
+            assertThatThrownBy(() -> new TodoTitle(tooLongTitle))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessageContaining("タイトルは255文字以内で入力してください");
+        }
     }
 
-    // Todo: 等価性のテスト
-    // Todo: 同じ値を持つインスタンスは等価である
-    // Todo: 異なる値を持つインスタンスは等価でない
-    // Todo: Nullとの比較は等価でない
-    // Todo: 異なる方との比較は等価でない
+    @Nested
+    @DisplayName("等価性")
+    class EqualityTests {
 
-    // Todo: toString のテスト
-    // Todo: toStringは値を返す
+        @Test
+        @DisplayName("同じ値を持つインスタンスは等価である")
+        void equalityWithSameValue() {
+            // Given
+            String value = "買い物をする";
+            TodoTitle title1 = new TodoTitle(value);
+            TodoTitle title2 = new TodoTitle(value);
+
+            // When & Then
+            assertThat(title1).isEqualTo(title2);
+            assertThat(title1.hashCode()).isEqualTo(title2.hashCode());
+        }
+
+        @Test
+        @DisplayName("異なる値を持つインスタンスは等価でない")
+        void inequalityWithDifferentValue() {
+            // Given
+            TodoTitle title1 = new TodoTitle("買い物をする");
+            TodoTitle title2 = new TodoTitle("洗濯をする");
+
+            // When & Then
+            assertThat(title1).isNotEqualTo(title2);
+        }
+
+        @Test
+        @DisplayName("nullとの飛白では等価ではない")
+        void inequalityWithNull() {
+            // Given
+            TodoTitle title = new TodoTitle("買い物をする");
+
+            // When & Then
+            assertThat(title).isNotEqualTo(null);
+        }
+
+        @Test
+        @DisplayName("異なる型との比較は等価でない")
+        void inequalityWithDifferentType() {
+            // Given
+            TodoTitle title = new TodoTitle("買い物をする");
+            String stringValue = "買い物をする";
+
+            // When & Then
+            assertThat(title).isNotEqualTo(stringValue);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("toString")
+    class ToStringTests {
+
+        @Test
+        @DisplayName("toStringは値を返す")
+        void toStringReturnsValue() {
+            // Given
+            String titleValue = "買い物をする";
+            TodoTitle title = new TodoTitle(titleValue);
+
+            // When
+            String result = title.toString();
+
+            // Then
+            assertThat(result).isEqualTo(titleValue);
+        }
+    }
 }
