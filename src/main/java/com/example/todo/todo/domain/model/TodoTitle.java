@@ -3,7 +3,7 @@ package com.example.todo.todo.domain.model;
 import java.util.Objects;
 
 /**
- * TodoEntityのタイトルを表す値オブジェクト
+ * TodoModelのタイトルを表す値オブジェクト
  * <p>
  * ビジネスルール：
  * <ul>
