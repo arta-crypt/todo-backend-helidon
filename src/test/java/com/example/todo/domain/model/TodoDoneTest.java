@@ -24,7 +24,7 @@ public class TodoDoneTest {
             // Then
             SoftAssertions.assertSoftly(
                     softAssertions -> {
-                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("TODO");
+                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("未完了");
                         softAssertions.assertThat(todoDone.isDone()).isFalse();
                     }
             );
@@ -39,7 +39,7 @@ public class TodoDoneTest {
             // Then
             SoftAssertions.assertSoftly(
                     softAssertions -> {
-                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("DONE");
+                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("完了");
                         softAssertions.assertThat(todoDone.isDone()).isTrue();
                     }
             );

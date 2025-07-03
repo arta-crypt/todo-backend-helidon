@@ -15,11 +15,11 @@ public enum TodoDone {
     /**
      * 未完了状態を表す列挙子
      */
-    TODO("TODO", false),
+    TODO("未完了", false),
     /**
      * 完了状態を表す列挙子
      */
-    DONE("DONE", true);
+    DONE("完了", true);
 
     private final String displayName;
     private final boolean completed;
