@@ -15,7 +15,7 @@ import java.util.Objects;
 public abstract class Id<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;    // SerializableのためのバージョンUID
-    private final T value;  // IDの実際の値。不変性を保証するためにfinal
+    private final T value;                              // IDの実際の値。不変性を保証するためにfinal
 
     /**
      * 指定された値でIDを構成します
