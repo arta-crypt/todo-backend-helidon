@@ -1,6 +1,6 @@
 package com.example.todo.domain.model;
 
-import com.example.todo.todo.domain.model.TodoDone;
+import com.example.todo.todo.domain.model.TodoStatus;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@DisplayName("TodoDone のテスト")
-public class TodoDoneTest {
+@DisplayName("TodoStatus のテスト")
+public class TodoStatusTest {
 
     @Nested
     @DisplayName("ステータス作成")
@@ -19,13 +19,13 @@ public class TodoDoneTest {
         @DisplayName("TODOステータスを作成できる")
         void createTodoStatus() {
             // Given
-            TodoDone todoDone = TodoDone.TODO;
+            TodoStatus todoStatus = TodoStatus.TODO;
 
             // Then
             SoftAssertions.assertSoftly(
                     softAssertions -> {
-                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("未完了");
-                        softAssertions.assertThat(todoDone.isDone()).isFalse();
+                        softAssertions.assertThat(todoStatus.getDisplayName()).isEqualTo("未完了");
+                        softAssertions.assertThat(todoStatus.isDone()).isFalse();
                     }
             );
         }
@@ -34,13 +34,13 @@ public class TodoDoneTest {
         @DisplayName("DONEステータスを作成できる")
         void createDoneStatus() {
             // Given
-            TodoDone todoDone = TodoDone.DONE;
+            TodoStatus todoStatus = TodoStatus.DONE;
 
             // Then
             SoftAssertions.assertSoftly(
                     softAssertions -> {
-                        softAssertions.assertThat(todoDone.getDisplayName()).isEqualTo("完了");
-                        softAssertions.assertThat(todoDone.isDone()).isTrue();
+                        softAssertions.assertThat(todoStatus.getDisplayName()).isEqualTo("完了");
+                        softAssertions.assertThat(todoStatus.isDone()).isTrue();
                     }
             );
         }
@@ -54,25 +54,25 @@ public class TodoDoneTest {
         @DisplayName("同じステータスは等価である")
         void sameStatusIsEquals() {
             // Given
-            TodoDone todoDone1 = TodoDone.TODO;
-            TodoDone todoDone2 = TodoDone.TODO;
+            TodoStatus todoStatus1 = TodoStatus.TODO;
+            TodoStatus todoStatus2 = TodoStatus.TODO;
 
             // When & Then
-            assertThat(todoDone1).isEqualTo(todoDone2);
-            assertThat(todoDone1.hashCode()).isEqualTo(todoDone2.hashCode());
-            assertThat(todoDone1 == todoDone2).isTrue();
+            assertThat(todoStatus1).isEqualTo(todoStatus2);
+            assertThat(todoStatus1.hashCode()).isEqualTo(todoStatus2.hashCode());
+            assertThat(todoStatus1 == todoStatus2).isTrue();
         }
 
         @Test
         @DisplayName("異なるステータスは等価でない")
         void differentStatusIsNotEquals() {
             // Given
-            TodoDone todoDone1 = TodoDone.TODO;
-            TodoDone todoDone2 = TodoDone.DONE;
+            TodoStatus todoStatus1 = TodoStatus.TODO;
+            TodoStatus todoStatus2 = TodoStatus.DONE;
 
             // When & Then
-            assertThat(todoDone1).isNotEqualTo(todoDone2);
-            assertThat(todoDone1 != todoDone2).isTrue();
+            assertThat(todoStatus1).isNotEqualTo(todoStatus2);
+            assertThat(todoStatus1 != todoStatus2).isTrue();
         }
     }
 
@@ -84,12 +84,12 @@ public class TodoDoneTest {
         @DisplayName("toString は表示名を返す")
         void toString_returnsDisplayName() {
             // Given
-            TodoDone todoDone1 = TodoDone.TODO;
-            TodoDone todoDone2 = TodoDone.DONE;
+            TodoStatus todoStatus1 = TodoStatus.TODO;
+            TodoStatus todoStatus2 = TodoStatus.DONE;
 
             // When & Then
-            assertThat(todoDone1.toString()).isEqualTo(todoDone1.getDisplayName());
-            assertThat(todoDone2.toString()).isEqualTo(todoDone2.getDisplayName());
+            assertThat(todoStatus1.toString()).isEqualTo(todoStatus1.getDisplayName());
+            assertThat(todoStatus2.toString()).isEqualTo(todoStatus2.getDisplayName());
         }
     }
 }

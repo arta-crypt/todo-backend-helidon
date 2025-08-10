@@ -10,7 +10,7 @@ package com.example.todo.todo.domain.model;
  *     <li>DONE :完了状態</li>
  * </ul>
  */
-public enum TodoDone {
+public enum TodoStatus {
 
     /**
      * 未完了状態を表す列挙子
@@ -30,7 +30,7 @@ public enum TodoDone {
      * @param displayName 表示名
      * @param completed   完了状態（true: 完了, false: 未完了）
      */
-    TodoDone(String displayName, boolean completed) {
+    TodoStatus(String displayName, boolean completed) {
         this.displayName = displayName;
         this.completed = completed;
     }
